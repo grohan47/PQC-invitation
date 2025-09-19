@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>An Offer You Can’t Refuse</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      /* Replace the old background line with these */
+    background-image: url("bg.jpg"); /* <-- Put your image URL here */
+    background-color: #000000; /* Fallback color if the image fails to load */
+    background-size: cover; /* Stretches the image to cover the entire screen */
+    background-position: center center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-attachment: fixed; /* Makes the background stay in place when scrolling */
+      color: #f5e6d3;
+      min-height: 100vh;
+      position: relative;
+    }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+
+    /* Rose seal */
+    .rose {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, #e63946, #a31212 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(199, 29, 29, 0.5);
+      animation: pulse 3s infinite ease-in-out;
+    }
+    .rose::before, .rose::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(163, 18, 18, 0.3);
+      inset: -8px;
+      z-index: -1;
+    }
+    .rose::after {
+      inset: -16px;
+      background: rgba(163, 18, 18, 0.15);
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(199, 29, 29, 0.5); }
+      50% { transform: scale(1.08); box-shadow: 0 0 35px rgba(199, 29, 29, 0.8); }
+    }
+
+    /* Wax seal stamp */
+    .seal-stamp {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 80px;
+      height: 80px;
+      background-color: #8c1c1c;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d9a0a0;
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transform: rotate(-10deg);
+      box-shadow:
+        inset 0 0 10px rgba(0,0,0,0.5),
+        2px 2px 5px rgba(0,0,0,0.3);
+      border: 2px solid #6b1515;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center p-6">
+
+  <audio id="score" src="godfather-theme.mp3" loop preload="auto"></audio>
+
+  <div id="overlay" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer" onclick="startAudio()">
+    <div class="bg-neutral-900 border border-neutral-700 rounded-xl p-6 max-w-sm text-center">
+      <h2 class="font-cinzel text-2xl mb-2 font-bold">A Moment, Please</h2>
+      <p class="text-neutral-300 mb-4">The Don requires atmosphere. Tap to enter and let the music play.</p>
+      <button
+        class="bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+      >Begin</button>
+    </div>
+  </div>
+
+  <main class="max-w-2xl w-full relative">
+
+    <div class="absolute inset-0 flex items-center justify-center -z-10 opacity-5">
+        <svg class="w-2/3 h-2/3" viewBox="0 0 64 64" aria-hidden="true">
+            <g stroke="#f5e6d3" stroke-width="1" fill="none" stroke-linecap="round">
+              <path d="M10 8h44" />
+              <path d="M22 8v18" />
+              <path d="M32 8v24" />
+              <path d="M42 8v18" />
+              <path d="M22 26c6 4 14 4 20 0" />
+            </g>
+        </svg>
+    </div>
+
+    <header class="text-center mb-8">
+      <h1 class="font-cinzel text-3xl md:text-4xl font-bold tracking-wide">
+        An Offer You Can’t Refuse
+      </h1>
+      <p class="italic text-neutral-400">A Summons from the Family • Plaksha Quizzing Club</p>
+    </header>
+
+    <section class="bg-neutral-950/80 backdrop-blur-sm border border-neutral-800 rounded-xl p-8 shadow-lg relative">
+      <div class="seal-stamp">Accepted</div>
+
+      <p class="italic text-lg">To <span id="recipient">Friend</span>,</p>
+
+      <h2 class="font-cinzel text-2xl my-4">
+        “I’m gonna make you an offer you can’t refuse.”
+      </h2>
+
+      <p class="leading-relaxed text-lg mb-4">
+        The Family has deliberated. On this day, we welcome you into our circle.
+        You are no longer just a contender; you are now a made member of the
+        <strong>Plaksha Quizzing Club</strong>.
+      </p>
+
+      <p class="leading-relaxed text-lg mb-4">
+        Understand this: loyalty is our currency. Respect the Quiz, honor your
+        fellow members, and never go against the Family. Uphold these principles,
+        and you will find we are... generous in our support.
+      </p>
+
+      <p class="leading-relaxed text-lg mb-6">
+        Your presence is now required in our private channels. It is there we will
+        discuss Family business—meetings, contests of wit, and other affairs.
+        Be watchful. A man of intelligence makes his own opportunities.
+      </p>
+
+      <p class="mt-8">
+        With respect,<br/>
+        <span class="font-cinzel font-bold text-xl">The Plaksha Quizzing Club</span><br/>
+        <span class="text-neutral-400 italic text-sm">
+          “A man who doesn’t spend time with his Club can never be a real man.”
+        </span>
+      </p>
+    </section>
+  </main>
+
+  <div class="rose"></div>
+
+  <script>
+    function startAudio() {
+      const overlay = document.getElementById('overlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+      document.getElementById('score').play().catch((e) => console.error("Audio playback failed:", e));
+    }
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+    if (name) {
+      // Sanitize name to prevent HTML injection
+      const sanitizedName = name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      document.getElementById('recipient').textContent = sanitizedName;
+    }
+  </script>
+</body>
+</html>
