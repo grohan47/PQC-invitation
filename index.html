@@ -373,7 +373,7 @@
   const rawName = params.get('name');
 
   // Always clean the URL as soon as we've read the param
-  if (rawName) cleanUrl();
+  // if (rawName) cleanUrl();
 
   // No param or not authorized => block
   if (!rawName || !authorizedNames.includes(rawName)) {
