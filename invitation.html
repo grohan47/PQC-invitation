@@ -89,7 +89,7 @@
 .fade-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
-  transition: opacity 9s ease, transform 900ms ease; /* was 900ms */
+  transition: opacity 11s ease, transform 100ms ease; /* was 900ms */
 }
 
 
@@ -142,7 +142,7 @@
 
     <!-- Subtle puppet-strings crest behind content -->
     <div class="absolute inset-0 flex items-center justify-center -z-10 opacity-10">
-      <svg class="w-2/3 h-2/3" viewBox="0 0 64 64" aria-hidden="true">
+      <!--<svg class="w-2/3 h-2/3" viewBox="0 0 64 64" aria-hidden="true">
         <g stroke="#f5e6d3" stroke-width="1" fill="none" stroke-linecap="round">
           <path d="M10 8h44" />
           <path d="M22 8v18" />
@@ -150,7 +150,12 @@
           <path d="M42 8v18" />
           <path d="M22 26c6 4 14 4 20 0" />
         </g>
-      </svg>
+      </svg>-->
+        <img
+    src="assets/puppet-strings.png"
+    alt="Family Crest"
+    class="w-2/3 max-w-[300px] h-auto object-contain mx-auto pointer-events-none select-none"
+  />
     </div>
 
     <header id="titleBlock" class="text-center mb-8 invisible-content">
@@ -199,7 +204,7 @@
     <!-- Left: Consigliere 1 -->
     <div class="flex-1 text-center order-3">
       <img src="assets/sign-Rohan.png" alt="Signature of Rohan Gupta"
-           class="mx-auto mb-2 w-2/3 max-w-[200px] h-auto object-contain pointer-events-none select-none" />
+           class="mx-auto mb-1 h-auto object-contain pointer-events-none select-none" />
       <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
       <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Rohan Gupta</p>
       <p class="italic text-neutral-400 text-xs md:text-sm">Consigliere</p>
@@ -288,5 +293,85 @@
       if (el) el.classList.add('invisible-content');
     });
   </script>
+ <script>
+/* -----------------------
+   NAME AUTH + URL CLEANUP
+   -----------------------
+   - Exact, case-sensitive match vs authorizedNames
+   - Cleans ?name=... from the URL with history.replaceState
+   - If unauthorized: hides page content and shows big UNAUTHORIZED
+*/
+(function() {
+  // === CONFIG: allowed names (exact match) ===
+  const authorizedNames = [
+    "Anahad Singh",
+    "Rohan Gupta",
+    "Kabir Bhalla"
+    // add more exact names here
+  ];
+
+  // Helpers
+  function sanitizeForText(s) {
+    if (s === null || s === undefined) return "";
+    return String(s).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function cleanUrl() {
+    try {
+      if (window.history && window.history.replaceState) {
+        const clean = window.location.origin + window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, clean);
+      }
+    } catch (e) { /* noop */ }
+  }
+  function showUnauthorized() {
+    const audioEl = document.getElementById('score');
+    const overlay = document.getElementById('overlay');
+    const content = document.getElementById('content');
+    try { if (audioEl && !audioEl.paused) audioEl.pause(); } catch(e) {}
+    if (overlay) overlay.style.display = 'none';
+    if (content) content.style.display = 'none';
+
+    const una = document.createElement('div');
+    una.id = 'unauthorized-block';
+    Object.assign(una.style, {
+      position: 'fixed', inset: '0', display: 'flex',
+      alignItems: 'center', justifyContent: 'center',
+      backgroundColor: '#050505', color: '#ff4d4f', zIndex: 99999,
+      fontFamily: "Cormorant Garamond, serif", textAlign: 'center', padding: '2rem'
+    });
+    una.innerHTML = `
+      <div>
+        <div style="font-size:clamp(32px,8vw,96px);font-weight:800;letter-spacing:2px;">UNAUTHORIZED</div>
+        <div style="margin-top:16px;color:#f0bfbf;font-size:clamp(12px,2.4vw,18px);">
+          You do not have permission to view this invitation.
+        </div>
+      </div>
+    `;
+    document.body.appendChild(una);
+  }
+
+  // Parse query param
+  const params = new URLSearchParams(window.location.search);
+  const rawName = params.get('name');
+
+  // Always clean the URL as soon as we've read the param
+  if (rawName) cleanUrl();
+
+  // No param or not authorized => block
+  if (!rawName || !authorizedNames.includes(rawName)) {
+    showUnauthorized();
+    return;
+  }
+
+  // Authorized: set name safely
+  const recipientElem = document.getElementById('recipient');
+  if (recipientElem) recipientElem.textContent = sanitizeForText(rawName);
+
+  // Keep your existing overlay & startAudio flow unchanged
+})();
+</script>
+
+
+
 </body>
 </html>
