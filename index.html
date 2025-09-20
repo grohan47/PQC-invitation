@@ -333,14 +333,14 @@
     if (s === null || s === undefined) return "";
     return String(s).replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
-  function cleanUrl() {
-    try {
-      if (window.history && window.history.replaceState) {
-        const clean = window.location.origin + window.location.pathname + window.location.hash;
-        window.history.replaceState({}, document.title, clean);
-      }
-    } catch (e) { /* noop */ }
-  }
+  // function cleanUrl() {
+  //   try {
+  //     if (window.history && window.history.replaceState) {
+  //       const clean = window.location.origin + window.location.pathname + window.location.hash;
+  //       window.history.replaceState({}, document.title, clean);
+  //     }
+  //   } catch (e) { /* noop */ }
+  // }
   function showUnauthorized() {
     const audioEl = document.getElementById('score');
     const overlay = document.getElementById('overlay');
