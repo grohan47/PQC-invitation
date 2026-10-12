@@ -123,18 +123,56 @@
       .fade-in { transition: none !important; }
       .invisible-content { opacity: 1; transform: none; }
     }
+
+    /* OTP box shake animation on error */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
   </style>
 </head>
 <body class="flex items-center justify-center p-6">
 
   <audio id="score" src="assets/godfather-theme.flac" preload="auto"></audio>
 
-  <!-- Tap-to-start overlay (kept) -->
-  <div id="overlay" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer" onclick="startAudio()">
-    <div class="bg-neutral-900 border border-neutral-700 rounded-xl p-6 max-w-sm text-center">
-      <h2 class="font-cinzel text-2xl mb-2 font-bold">A Moment, Please</h2>
-      <p class="text-neutral-300 mb-4">The Don requires atmosphere. Tap to enter and let the music play.</p>
-      <button class="bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded-md">Begin</button>
+  <!-- Invite Code / OTP Verification Gate -->
+  <div id="gateOverlay" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-700">
+    <div id="gateCard" class="glass rounded-2xl p-6 sm:p-8 max-w-md w-full text-center relative border border-neutral-700/80 shadow-2xl">
+      <!-- Crest Icon -->
+      <img
+        src="assets/puppet-strings.png"
+        alt="Family Crest"
+        class="w-16 h-16 object-contain mx-auto mb-4 opacity-75 select-none pointer-events-none"
+      />
+
+      <h2 class="font-cinzel text-2xl sm:text-3xl mb-2 font-bold text-[#e0d2b7] tracking-wider">
+        The Godfathers' Summons
+      </h2>
+      <p class="text-neutral-300 text-sm sm:text-base italic mb-6">
+        The Family requires your credentials. Enter the 6-character code delivered to your correspondence.
+      </p>
+
+      <!-- 6 OTP Character Inputs -->
+      <div id="otpContainer" class="flex justify-center items-center gap-2 sm:gap-3 mb-4">
+        <input type="text" maxlength="1" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-cinzel font-bold text-[#f5e6d3] bg-neutral-900/90 border border-neutral-600 rounded-lg focus:border-red-600 focus:ring-2 focus:ring-red-800/60 focus:outline-none transition-all uppercase" data-index="0" autocomplete="off" spellcheck="false" inputmode="text" autofocus />
+        <input type="text" maxlength="1" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-cinzel font-bold text-[#f5e6d3] bg-neutral-900/90 border border-neutral-600 rounded-lg focus:border-red-600 focus:ring-2 focus:ring-red-800/60 focus:outline-none transition-all uppercase" data-index="1" autocomplete="off" spellcheck="false" inputmode="text" />
+        <input type="text" maxlength="1" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-cinzel font-bold text-[#f5e6d3] bg-neutral-900/90 border border-neutral-600 rounded-lg focus:border-red-600 focus:ring-2 focus:ring-red-800/60 focus:outline-none transition-all uppercase" data-index="2" autocomplete="off" spellcheck="false" inputmode="text" />
+        <input type="text" maxlength="1" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-cinzel font-bold text-[#f5e6d3] bg-neutral-900/90 border border-neutral-600 rounded-lg focus:border-red-600 focus:ring-2 focus:ring-red-800/60 focus:outline-none transition-all uppercase" data-index="3" autocomplete="off" spellcheck="false" inputmode="text" />
+        <input type="text" maxlength="1" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-cinzel font-bold text-[#f5e6d3] bg-neutral-900/90 border border-neutral-600 rounded-lg focus:border-red-600 focus:ring-2 focus:ring-red-800/60 focus:outline-none transition-all uppercase" data-index="4" autocomplete="off" spellcheck="false" inputmode="text" />
+        <input type="text" maxlength="1" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-cinzel font-bold text-[#f5e6d3] bg-neutral-900/90 border border-neutral-600 rounded-lg focus:border-red-600 focus:ring-2 focus:ring-red-800/60 focus:outline-none transition-all uppercase" data-index="5" autocomplete="off" spellcheck="false" inputmode="text" />
+      </div>
+
+      <!-- Status / Feedback message -->
+      <div id="otpStatus" class="min-h-[1.5rem] text-sm italic transition-all duration-300 mb-4 text-neutral-400"></div>
+
+      <!-- Submit button -->
+      <button id="verifyBtn" onclick="submitInviteCode()" class="w-full bg-gradient-to-r from-red-900 via-red-800 to-red-900 hover:from-red-800 hover:to-red-700 text-[#f5e6d3] font-cinzel font-semibold tracking-wider py-3 px-4 rounded-lg border border-red-700/60 shadow-lg shadow-red-950/50 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+        Enter The Family
+      </button>
     </div>
   </div>
 
@@ -194,41 +232,43 @@
   <!-- Sign-off -->
   <p class="text-left md:text-center text-neutral-300 mb-6 leading-snug">
     With respect,<br/>
-    <span class="font-cinzel font-bold text-lg md:text-xl">Plaksha Quizzing Club</span>
+    <span class="font-cinzel font-bold text-lg md:text-xl text-[#e0d2b7]">The Godfathers</span><br/>
+    <span class="italic text-neutral-400 text-sm">Plaksha Quizzing Club</span>
   </p>
 
-  <!-- Three signatures: Godfather centered and larger -->
+  <!-- Three signatures: The Godfathers of Quizzing Club signing together -->
   <div class="flex flex-col md:flex-row items-stretch justify-center gap-6 md:gap-12">
-    <!-- Left: Consigliere 1 -->
-    <div class="flex-1 text-center order-3">
-      <img src="assets/sign-Rohan.png" alt="Signature of Rohan Gupta"
-           class="mx-auto mb-2 object-contain pointer-events-none select-none
-         h-20 sm:h-16 md:h-20 lg:h-24" />
-      <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
-      <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Rohan Gupta</p>
-      <p class="italic text-neutral-400 text-xs md:text-sm">Consigliere</p>
-      <p class="italic text-neutral-500 text-xs md:text-sm">Co-President</p>
-    </div>
-
-    <!-- Center: Godfather (slightly larger) -->
-    <div class="flex-1 text-center order-2 md:scale-[1.15]">
-      <img src="assets/sign-Godfather.png" alt="Signature of Anahad Singh"
-           class="mx-auto mb-2 object-contain pointer-events-none select-none
-         h-20 sm:h-16 md:h-20 lg:h-24" />
-      <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
-      <p class="font-cinzel font-extrabold text-lg md:text-xl leading-tight">Anahad Singh</p>
-      <p class="italic text-neutral-400 text-sm md:text-base">The Godfather</p>
-    </div>
-
-    <!-- Right: Consigliere 2 -->
+    <!-- Left: Kabir Bhalla -->
     <div class="flex-1 text-center order-1">
       <img src="assets/sign-Kabir.svg" alt="Signature of Kabir Bhalla"
            class="mx-auto mb-2 object-contain pointer-events-none select-none
          h-20 sm:h-16 md:h-20 lg:h-24" />
       <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
       <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Kabir Bhalla</p>
-      <p class="italic text-neutral-400 text-xs md:text-sm">Consigliere</p>
-      <p class="italic text-neutral-500 text-xs md:text-sm">POC, Co-President</p>
+      <p class="italic text-neutral-400 text-xs md:text-sm">Godfather</p>
+      <p class="italic text-neutral-500 text-xs md:text-sm">Co-President</p>
+    </div>
+
+    <!-- Center: Anahad Singh -->
+    <div class="flex-1 text-center order-2">
+      <img src="assets/sign-Godfather.png" alt="Signature of Anahad Singh"
+           class="mx-auto mb-2 object-contain pointer-events-none select-none
+         h-20 sm:h-16 md:h-20 lg:h-24" />
+      <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
+      <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Anahad Singh</p>
+      <p class="italic text-neutral-400 text-xs md:text-sm">Godfather</p>
+      <p class="italic text-neutral-500 text-xs md:text-sm">Co-President</p>
+    </div>
+
+    <!-- Right: Rohan Gupta -->
+    <div class="flex-1 text-center order-3">
+      <img src="assets/sign-Rohan.png" alt="Signature of Rohan Gupta"
+           class="mx-auto mb-2 object-contain pointer-events-none select-none
+         h-20 sm:h-16 md:h-20 lg:h-24" />
+      <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
+      <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Rohan Gupta</p>
+      <p class="italic text-neutral-400 text-xs md:text-sm">Godfather</p>
+      <p class="italic text-neutral-500 text-xs md:text-sm">POC & Co-President</p>
     </div>
   </div>
 
@@ -248,159 +288,220 @@
     // Safeguard: respect reduced motion for users who prefer it
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Database verification endpoint:
+    // If running on GitHub Pages (*.github.io), queries https://db.rohan-gupta.dev/api/verify.
+    // If self-hosted (e.g. via FastAPI app.py), uses relative '/api/verify' for seamless zero-CORS requests.
+    const DB_VERIFY_ENDPOINT = window.location.hostname.includes('github.io')
+      ? 'https://db.rohan-gupta.dev/api/verify'
+      : '/api/verify';
+
+    const gateOverlay = document.getElementById('gateOverlay');
+    const otpContainer = document.getElementById('otpContainer');
+    const otpInputs = Array.from(document.querySelectorAll('.otp-input'));
+    const otpStatus = document.getElementById('otpStatus');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const scoreAudio = document.getElementById('score');
+
+    // Ensure main content starts hidden
+    ['content','titleBlock','letterBlock','signBlock'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('invisible-content');
+    });
+
+    // Auto-focus the first OTP character box on load, or pre-populate if previously entered
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const savedCode = localStorage.getItem('pqc_invite_code');
+        if (savedCode && savedCode.length === 6) {
+          for (let i = 0; i < otpInputs.length; i++) {
+            otpInputs[i].value = savedCode[i] || '';
+          }
+          if (otpInputs.length > 0) otpInputs[otpInputs.length - 1].focus();
+          return;
+        }
+      } catch (e) {}
+
+      if (otpInputs.length > 0) {
+        otpInputs[0].focus();
+      }
+    });
+
+    function setStatus(message, type = 'info') {
+      otpStatus.textContent = message;
+      otpStatus.className = 'min-h-[1.5rem] text-sm italic transition-all duration-300 mb-4';
+      if (type === 'error') {
+        otpStatus.classList.add('text-red-400', 'font-medium');
+      } else if (type === 'success') {
+        otpStatus.classList.add('text-amber-200', 'font-medium');
+      } else if (type === 'loading') {
+        otpStatus.classList.add('text-neutral-300');
+      } else {
+        otpStatus.classList.add('text-neutral-400');
+      }
+    }
+
+    function triggerShake() {
+      otpContainer.classList.remove('shake');
+      void otpContainer.offsetWidth; // Force CSS reflow
+      otpContainer.classList.add('shake');
+    }
+
+    function getEnteredCode() {
+      return otpInputs.map(input => input.value.trim()).join('').toUpperCase();
+    }
+
+    // OTP box event handlers: typing, backspace, navigation, pasting
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const cleaned = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        e.target.value = cleaned ? cleaned.slice(-1) : '';
+
+        if (e.target.value && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+
+        const fullCode = getEnteredCode();
+        if (fullCode.length === 6) {
+          submitInviteCode();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace') {
+          if (!e.target.value && index > 0) {
+            otpInputs[index - 1].focus();
+            otpInputs[index - 1].value = '';
+          }
+        } else if (e.key === 'ArrowLeft' && index > 0) {
+          otpInputs[index - 1].focus();
+        } else if (e.key === 'ArrowRight' && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        } else if (e.key === 'Enter') {
+          submitInviteCode();
+        }
+      });
+
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const clipboard = (e.clipboardData || window.clipboardData)
+          .getData('text')
+          .replace(/[^a-zA-Z0-9]/g, '')
+          .toUpperCase()
+          .slice(0, 6);
+
+        if (!clipboard) return;
+
+        for (let i = 0; i < otpInputs.length; i++) {
+          otpInputs[i].value = clipboard[i] || '';
+        }
+
+        const nextFocus = Math.min(clipboard.length, otpInputs.length - 1);
+        otpInputs[nextFocus].focus();
+
+        if (clipboard.length === 6) {
+          submitInviteCode();
+        }
+      });
+    });
+
+    let isVerifying = false;
+
+    async function submitInviteCode() {
+      if (isVerifying) return;
+      const code = getEnteredCode();
+
+      if (code.length !== 6) {
+        setStatus('Please enter all 6 characters of your invite code.', 'error');
+        triggerShake();
+        return;
+      }
+
+      isVerifying = true;
+      verifyBtn.disabled = true;
+      setStatus('Consulting the Family records...', 'loading');
+
+      try {
+        const response = await fetch(DB_VERIFY_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+
+        if (!response.ok) {
+          if (response.status === 404 || response.status === 401) {
+            throw new Error('Code not recognized by the Family.');
+          }
+          throw new Error('Family records unavailable (HTTP ' + response.status + ').');
+        }
+
+        const data = await response.json();
+        let resolvedName = null;
+
+        if (data && typeof data === 'object') {
+          if (data.name) resolvedName = data.name;
+          else if (data.data && data.data.name) resolvedName = data.data.name;
+          else if (data.recipient) resolvedName = data.recipient;
+          else if (data.valid === false) {
+            throw new Error(data.message || 'Code not recognized by the Family.');
+          }
+        }
+
+        if (!resolvedName) {
+          throw new Error('Invite code not found in Family records.');
+        }
+
+        // Sanitized display of inductee's resolved name
+        const sanitized = String(resolvedName).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const recipientEl = document.getElementById('recipient');
+        if (recipientEl) recipientEl.textContent = sanitized;
+
+        // Remember code on this device so students can easily view their letter again
+        try { localStorage.setItem('pqc_invite_code', code); } catch (e) {}
+
+        setStatus('Welcome to the Family.', 'success');
+
+        // Play Godfather score (user interaction allows audio play)
+        if (scoreAudio) {
+          scoreAudio.play().catch(e => console.warn('Audio playback could not start automatically:', e));
+        }
+
+        // Smoothly fade out the gate overlay
+        gateOverlay.style.opacity = '0';
+        gateOverlay.style.pointerEvents = 'none';
+        setTimeout(() => {
+          gateOverlay.style.display = 'none';
+        }, 700);
+
+        // Staggered reveal of letter
+        if (reducedMotion) {
+          revealStaggered();
+        } else {
+          setTimeout(revealStaggered, 3000);
+        }
+
+      } catch (err) {
+        setStatus(err.message || 'Verification failed. Please try again.', 'error');
+        triggerShake();
+        otpInputs.forEach(inp => inp.value = '');
+        otpInputs[0].focus();
+      } finally {
+        isVerifying = false;
+        verifyBtn.disabled = false;
+      }
+    }
+
     function revealStaggered() {
       const content = document.getElementById('content');
       const title = document.getElementById('titleBlock');
       const letter = document.getElementById('letterBlock');
       const sign = document.getElementById('signBlock');
 
-      // Main container fade-in
       content.classList.add('fade-in');
-
-      // Stagger children for drama
       setTimeout(() => title.classList.add('fade-in'), 250);
       setTimeout(() => letter.classList.add('fade-in'), 700);
       setTimeout(() => sign.classList.add('fade-in'), 1200);
     }
-
-    function startAudio() {
-      const overlay = document.getElementById('overlay');
-      if (overlay) overlay.style.display = 'none';
-
-      const audio = document.getElementById('score');
-      // Start score (requires user gesture — this click)
-      audio.play().catch((e) => console.error("Audio playback failed:", e));
-
-      // Show ONLY background for ~4s, then fade in content
-      if (reducedMotion) {
-        // Reveal immediately for reduced-motion users
-        revealStaggered();
-      } else {
-        setTimeout(revealStaggered, 4000);
-      }
-    }
-
-    // Personalize recipient from ?name=
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get('name');
-    if (name) {
-      const sanitizedName = name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      document.getElementById('recipient').textContent = sanitizedName;
-    }
-
-    // Ensure elements start hidden (in case Tailwind loads late)
-    ['content','titleBlock','letterBlock','signBlock'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('invisible-content');
-    });
   </script>
- <script>
-/* -----------------------
-   NAME AUTH + URL CLEANUP
-   -----------------------
-   - Exact, case-sensitive match vs authorizedNames
-   - Cleans ?name=... from the URL with history.replaceState
-   - If unauthorized: hides page content and shows big UNAUTHORIZED
-*/
-(function() {
-  // === CONFIG: allowed names (exact match) ===
-  const authorizedNames = [
-    "Anahad Singh",
-    "Rohan Gupta",
-    "Kabir Bhalla",
-    "Parth Dogra",
-    "Vibhav Sahu",
-    "Prakamya Joshi",
-    "Prakul Jain",
-    "Gracy Tanna",
-    "Chahna Agarwal",
-    "Samreen Tole",
-    "Ananya Sunder",
-    "Joepaul Thomas",
-    "Kavish Kumar",
-    "Avnet Aggarwal",
-    "Jatin Shetty",
-    "Aarushi Anand",
-    "Murtaza Vali",
-    "Priyaj Rai",
-    "Arnav Nathani",
-    "Tanmay Mohan",
-    "Vincent Zacharias",
-    "Sahil Patel",
-    "Krrish Singhania",
-    "Rakshaan Thareja",
-    "Shourrya Gupta",
-    "Harsh Srivastava",
-    "Anirudh Puri",
-    "Sahil Aleem",
-    "Argh Jain",
-    "Sahil Gada",
-    "Jyotiraditya Dayal",
-    "Mukund Saraf"
-
-    // add more exact names here
-  ];
-
-  // Helpers
-  function sanitizeForText(s) {
-    if (s === null || s === undefined) return "";
-    return String(s).replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
-  // function cleanUrl() {
-  //   try {
-  //     if (window.history && window.history.replaceState) {
-  //       const clean = window.location.origin + window.location.pathname + window.location.hash;
-  //       window.history.replaceState({}, document.title, clean);
-  //     }
-  //   } catch (e) { /* noop */ }
-  // }
-  function showUnauthorized() {
-    const audioEl = document.getElementById('score');
-    const overlay = document.getElementById('overlay');
-    const content = document.getElementById('content');
-    try { if (audioEl && !audioEl.paused) audioEl.pause(); } catch(e) {}
-    if (overlay) overlay.style.display = 'none';
-    if (content) content.style.display = 'none';
-
-    const una = document.createElement('div');
-    una.id = 'unauthorized-block';
-    Object.assign(una.style, {
-      position: 'fixed', inset: '0', display: 'flex',
-      alignItems: 'center', justifyContent: 'center',
-      backgroundColor: '#050505', color: '#ff4d4f', zIndex: 99999,
-      fontFamily: "Cormorant Garamond, serif", textAlign: 'center', padding: '2rem'
-    });
-    una.innerHTML = `
-      <div>
-        <div style="font-size:clamp(32px,8vw,96px);font-weight:800;letter-spacing:2px;">UNAUTHORIZED</div>
-        <div style="margin-top:16px;color:#f0bfbf;font-size:clamp(12px,2.4vw,18px);">
-          You do not have permission to view this invitation.
-        </div>
-      </div>
-    `;
-    document.body.appendChild(una);
-  }
-
-  // Parse query param
-  const params = new URLSearchParams(window.location.search);
-  const rawName = params.get('name');
-
-  // Always clean the URL as soon as we've read the param
-  // if (rawName) cleanUrl();
-
-  // No param or not authorized => block
-  if (!rawName || !authorizedNames.includes(rawName)) {
-    showUnauthorized();
-    return;
-  }
-
-  // Authorized: set name safely
-  const recipientElem = document.getElementById('recipient');
-  if (recipientElem) recipientElem.textContent = sanitizeForText(rawName);
-
-  // Keep your existing overlay & startAudio flow unchanged
-})();
-</script>
 
 
 
