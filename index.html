@@ -289,11 +289,13 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Database verification endpoint:
-    // If running on GitHub Pages (*.github.io), queries https://db.rohan-gupta.dev/api/verify.
-    // If self-hosted (e.g. via FastAPI app.py), uses relative '/api/verify' for seamless zero-CORS requests.
-    const DB_VERIFY_ENDPOINT = window.location.hostname.includes('github.io')
-      ? 'https://db.rohan-gupta.dev/api/verify'
-      : '/api/verify';
+    // If running on localhost:8000 directly via FastAPI app.py, uses relative '/api/verify'.
+    // Everywhere else (e.g., custom domain pqc.invitation.rohan-gupta.dev, *.github.io, or other ports),
+    // queries https://db.rohan-gupta.dev/api/verify.
+    const isLocalBackend = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port === '8000';
+    const DB_VERIFY_ENDPOINT = isLocalBackend
+      ? '/api/verify'
+      : 'https://db.rohan-gupta.dev/api/verify';
 
     const gateOverlay = document.getElementById('gateOverlay');
     const otpContainer = document.getElementById('otpContainer');
