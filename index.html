@@ -215,17 +215,17 @@
 
       <p class="leading-relaxed text-lg mb-4">
         The Family has deliberated. On this day, we welcome you into our circle.
-        Your capabilities have shone through our process, and you are now officially a <strong> made member of the
+        You have proven your mettle, and you are now officially a <strong>made member of the
         Plaksha Quizzing Club</strong>.
       </p>
 
       <p class="leading-relaxed text-lg mb-4">
-        Understand this: loyalty is our currency. As one of us, never forget the old saying: <i>“Friendship is everything. Friendship is more than talent. It is more than the government. It is almost the equal of family.”</i> Let these words guide you: respect the art of Quizzing, honor your fellow members, and never betray the Family. Uphold these principles,
-        and you will find we are... <i>generous</i> in our support.
+        Understand this: in our world, loyalty is everything. As one of us, never forget the old saying: <i>“Friendship is everything. Friendship is more than talent. It is more than the government. It is almost the equal of family.”</i> Let these words guide you: respect the art of Quizzing, honor your fellow members, and never go against the Family. Uphold these principles,
+        and you will find we are... <i>generous</i> in our favor.
       </p>
 
       <p class="leading-relaxed text-lg mb-6">
-        You will soon be added to our private channels. It is there that we attend to Family business: meetings, contests of wit, artful designs and insightful discussions about the wider world. Remain vigilant, for a man of intelligence <strong>makes his own opportunities.</strong>
+        You will soon be summoned to our private channels. It is there that we conduct Family business: meetings, contests of wit, artful designs, and insightful discussions about the wider world. Remain vigilant, for a man of intelligence <strong>makes his own opportunities.</strong>
       </p>
 
 <div id="signBlock" class="mt-12 pt-6 border-t border-neutral-700/50 invisible-content">
@@ -245,30 +245,27 @@
          h-20 sm:h-16 md:h-20 lg:h-24" />
       <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
       <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Kabir Bhalla</p>
-      <p class="italic text-neutral-400 text-xs md:text-sm">Godfather</p>
-      <p class="italic text-neutral-500 text-xs md:text-sm">Co-President</p>
+      <p class="italic text-neutral-400 text-xs md:text-sm">Co-President</p>
     </div>
 
-    <!-- Center: Anahad Singh -->
+    <!-- Center: Rohan Gupta -->
     <div class="flex-1 text-center order-2">
-      <img src="assets/sign-Godfather.png" alt="Signature of Anahad Singh"
-           class="mx-auto mb-2 object-contain pointer-events-none select-none
-         h-20 sm:h-16 md:h-20 lg:h-24" />
-      <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
-      <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Anahad Singh</p>
-      <p class="italic text-neutral-400 text-xs md:text-sm">Godfather</p>
-      <p class="italic text-neutral-500 text-xs md:text-sm">Co-President</p>
-    </div>
-
-    <!-- Right: Rohan Gupta -->
-    <div class="flex-1 text-center order-3">
       <img src="assets/sign-Rohan.png" alt="Signature of Rohan Gupta"
            class="mx-auto mb-2 object-contain pointer-events-none select-none
          h-20 sm:h-16 md:h-20 lg:h-24" />
       <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
       <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Rohan Gupta</p>
-      <p class="italic text-neutral-400 text-xs md:text-sm">Godfather</p>
-      <p class="italic text-neutral-500 text-xs md:text-sm">POC & Co-President</p>
+      <p class="italic text-neutral-400 text-xs md:text-sm">POC & Co-President</p>
+    </div>
+
+    <!-- Right: Anahad Singh -->
+    <div class="flex-1 text-center order-3">
+      <img src="assets/sign-Godfather.png" alt="Signature of Anahad Singh"
+           class="mx-auto mb-2 object-contain pointer-events-none select-none
+         h-20 sm:h-16 md:h-20 lg:h-24" />
+      <div class="pb-2 mb-2 border-b-2 border-neutral-500"></div>
+      <p class="font-cinzel font-semibold text-base md:text-lg leading-tight">Anahad Singh</p>
+      <p class="italic text-neutral-400 text-xs md:text-sm">Co-President</p>
     </div>
   </div>
 
@@ -283,10 +280,48 @@
     </section>
   </main>
 
+  <!-- Fixed Mute Button in the bottom right -->
+  <button
+    id="muteBtn"
+    type="button"
+    onclick="toggleMute()"
+    aria-label="Mute audio"
+    title="Mute audio"
+    class="fixed bottom-5 right-5 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full glass flex items-center justify-center text-[#f5e6d3] hover:text-amber-200 border border-neutral-700/80 hover:border-amber-700/80 shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-700/60"
+  >
+    <!-- Speaker On Icon -->
+    <svg id="soundOnIcon" class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+    </svg>
+    <!-- Speaker Muted Icon -->
+    <svg id="soundOffIcon" class="w-5 h-5 sm:w-6 sm:h-6 hidden text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+      <line x1="22" y1="9" x2="16" y2="15"></line>
+      <line x1="16" y1="9" x2="22" y2="15"></line>
+    </svg>
+  </button>
 
   <script>
     // Safeguard: respect reduced motion for users who prefer it
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Strip query parameters from URL so they are not shown to the user,
+    // while pre-extracting invite code if passed via URL (e.g. ?code=XXXXXX)
+    let initialParamCode = null;
+    try {
+      if (window.location.search) {
+        const urlParams = new URLSearchParams(window.location.search);
+        initialParamCode = (urlParams.get('code') || urlParams.get('c') || '').trim().replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        if (window.history && window.history.replaceState) {
+          const cleanUrl = window.location.pathname + window.location.hash;
+          window.history.replaceState(null, document.title, cleanUrl);
+        }
+      }
+    } catch (e) {
+      console.warn('Could not clean URL query parameters:', e);
+    }
 
     // Database verification endpoint:
     // If running on localhost:8000 directly via FastAPI app.py, uses relative '/api/verify'.
@@ -303,6 +338,34 @@
     const otpStatus = document.getElementById('otpStatus');
     const verifyBtn = document.getElementById('verifyBtn');
     const scoreAudio = document.getElementById('score');
+    const muteBtn = document.getElementById('muteBtn');
+    const soundOnIcon = document.getElementById('soundOnIcon');
+    const soundOffIcon = document.getElementById('soundOffIcon');
+
+    function toggleMute() {
+      if (!scoreAudio) return;
+      scoreAudio.muted = !scoreAudio.muted;
+      updateMuteUI();
+    }
+
+    function updateMuteUI() {
+      if (!scoreAudio) return;
+      if (scoreAudio.muted) {
+        if (soundOnIcon) soundOnIcon.classList.add('hidden');
+        if (soundOffIcon) soundOffIcon.classList.remove('hidden');
+        if (muteBtn) {
+          muteBtn.setAttribute('aria-label', 'Unmute audio');
+          muteBtn.setAttribute('title', 'Unmute audio');
+        }
+      } else {
+        if (soundOnIcon) soundOnIcon.classList.remove('hidden');
+        if (soundOffIcon) soundOffIcon.classList.add('hidden');
+        if (muteBtn) {
+          muteBtn.setAttribute('aria-label', 'Mute audio');
+          muteBtn.setAttribute('title', 'Mute audio');
+        }
+      }
+    }
 
     // Ensure main content starts hidden
     ['content','titleBlock','letterBlock','signBlock'].forEach(id => {
@@ -310,13 +373,16 @@
       if (el) el.classList.add('invisible-content');
     });
 
-    // Auto-focus the first OTP character box on load, or pre-populate if previously entered
+    // Auto-focus the first OTP character box on load, or pre-populate if previously entered / passed via URL
     window.addEventListener('DOMContentLoaded', () => {
       try {
-        const savedCode = localStorage.getItem('pqc_invite_code');
-        if (savedCode && savedCode.length === 6) {
+        const codeToFill = (initialParamCode && initialParamCode.length === 6)
+          ? initialParamCode
+          : (localStorage.getItem('pqc_invite_code') || '');
+
+        if (codeToFill && codeToFill.length === 6) {
           for (let i = 0; i < otpInputs.length; i++) {
-            otpInputs[i].value = savedCode[i] || '';
+            otpInputs[i].value = codeToFill[i] || '';
           }
           if (otpInputs.length > 0) otpInputs[otpInputs.length - 1].focus();
           return;
@@ -452,10 +518,20 @@
           throw new Error('Invite code not found in Family records.');
         }
 
-        // Sanitized display of inductee's resolved name
-        const sanitized = String(resolvedName).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        // Extract inductee's first name using basic regex (anything before the first blank)
+        const rawFullName = String(resolvedName).trim();
+        const firstNameMatch = rawFullName.match(/^([^\s]+)/);
+        let displayName = firstNameMatch ? firstNameMatch[1] : rawFullName;
+
+        // If first name falls to 1 or 2 characters (e.g. initials like 'A.' or 'K'), use the full name
+        if (displayName.length <= 2) {
+          displayName = rawFullName;
+        }
+
+        // Sanitized display of inductee's name
+        const sanitized = displayName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         const recipientEl = document.getElementById('recipient');
-        if (recipientEl) recipientEl.textContent = sanitized;
+        if (recipientEl) recipientEl.textContent = sanitized || 'Friend';
 
         // Remember code on this device so students can easily view their letter again
         try { localStorage.setItem('pqc_invite_code', code); } catch (e) {}
